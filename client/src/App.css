@@ -9,6 +9,7 @@
     input[type=password], 
     input[type=email], 
     input[type=number],
+    input[type=tel],
     textarea {
         @apply w-full border border-gray-300 rounded-2xl py-2 px-4 my-2;
     }
@@ -16,4 +17,8 @@
     .button-primary {
         @apply bg-primary text-white rounded-full py-2 px-4 my-2 w-full;
     }
+}
+
+textarea{
+    height: 200px;
 }

@@ -4,6 +4,7 @@ const cors = require('cors'); // Importamos cors para permitir peticiones desde 
 const { default: mongoose } = require('mongoose'); // Importamos mongoose para conectarnos a la base de datos
 const User = require('./models/User'); // Importamos el modelo de usuario
 const Place = require('./models/Place'); // Importamos el modelo de lugar
+const Booking = require('./models/Booking'); // Importamos el modelo de reserva
 const cookieParser = require('cookie-parser'); // Importamos cookie-parser para manejar cookies
 const bcrypt = require('bcryptjs'); // Importamos bcrypt para encriptar contraseñas
 const jwt = require('jsonwebtoken'); // Importamos jwt para crear tokens de autenticación
@@ -31,6 +32,16 @@ mongoose.connect(process.env.MONGO_URL); // Nos conectamos a la base de datos
 app.get('/test', (req, res) => {
     res.json('test ok');
 });
+
+// Creamos una funcion para obtener los datos del usuario a partir del token
+function getUserDataFromReq(req){
+    return new Promise((resolve, reject) => {
+        jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
+            if(err) throw err;
+            resolve(userData);
+        });
+    });
+}
 
 // Creamos una ruta para registrar un usuario
 app.post('/register', async (req, res) => {
@@ -91,15 +102,19 @@ app.post('/logout', (req, res) => {
     res.clearCookie('token').json(true);
 });
 
-// Creamos una ruta para subir una imagen
+// Creamos una ruta para subir una imagen desde el formulario de alojamientos
 app.post('/upload-by-link', async (req, res) => {
     const {link} = req.body;
-    const newName = 'photo' + Date.now() + '.jpg';
-    await imageDownloader.image({
-        url: link,
-        dest: __dirname+'/uploads/' + newName,
-    });
-    res.json(newName);
+    try{
+        const newName = 'photo' + Date.now() + '.jpg';
+        await imageDownloader.image({
+            url: link,
+            dest: __dirname+'/uploads/' + newName,
+        });
+        res.json(newName);
+    }catch(err){
+        res.status(422).json(err);
+    }
 });
 
 // Creamos una ruta para subir varias imágenes
@@ -113,17 +128,19 @@ app.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
         const newPath = path + '.' + ext;
         fs.renameSync(path, newPath);
         uploadedFiles.push(newPath.replace('uploads\\', ''));
+        console.log(newPath)
     }
     res.json(uploadedFiles)
 });
 
-// Creamos una ruta para obtener los lugares
+// Creamos una ruta para crear un alojamiento nuevo
 app.post('/places', (req, res) => {
     const {token} = req.cookies;
     const {
         title, address, addedPhotos, 
         description, perks, extraInfo, 
-        checkIn, checkOut, maxGuests} = req.body;
+        checkIn, checkOut, maxGuests, price
+    } = req.body;
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if(err) throw err;
         const placeDoc = await Place.create({
@@ -137,18 +154,99 @@ app.post('/places', (req, res) => {
             checkIn,
             checkOut,
             maxGuests,
+            price,
         });
         res.json(placeDoc);
     });
 });
 
-// Creamos una ruta para obtener los lugares del usuario autenticado
-app.get('/places', (req, res) => {
+// Creamos una ruta para obtener los alojamientos del usuario autenticado
+app.get('/user-places', (req, res) => {
     const {token} = req.cookies;
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if(err) throw err;
         const {id} = userData;
         res.json(await Place.find({owner: id}));
     });
 })
+
+// Creamos una ruta para obtener un alojamiento por su id
+app.get('/places/:id', async (req, res) => {
+    const {id} = req.params;
+    res.json(await Place.findById(id));
+});
+
+// Creamos una ruta para actualizar un alojamiento
+app.put('/places', async (req, res) => {
+    const {token} = req.cookies;
+    const {
+        id, title, address, addedPhotos, 
+        description, perks, extraInfo, 
+        checkIn, checkOut, maxGuests, price,
+    } = req.body;
+    
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if(err) throw err;
+        const placeDoc = await Place.findById(id);
+        if(userData.id === placeDoc.owner.toString()){
+            console.log({price});
+            placeDoc.set({
+                title,
+                address,
+                photos: addedPhotos,
+                description,
+                perks,
+                extraInfo,
+                checkIn,
+                checkOut,
+                maxGuests,
+                price,
+            });
+            await placeDoc.save();
+            res.json('Updated successfully');
+        }
+    });
+});
+
+// Creamos una ruta para mostrar todos los alojamientos
+app.get('/places', async (req, res) => {
+    res.json(await Place.find());
+});
+
+//Creamos un endpoint para guardar una reserva
+app.post('/bookings', async (req, res) => {
+    const userData = await getUserDataFromReq(req);
+    const {
+        place, 
+        checkIn, 
+        checkOut, 
+        numberOfGuests, 
+        name, 
+        phone,
+        price,
+    } = req.body;
+    Booking.create({
+        place, 
+        checkIn, 
+        checkOut, 
+        numberOfGuests, 
+        name, 
+        phone,
+        price,
+        user: userData.id,
+    }).then((doc) => {
+        res.json(doc);
+    }).catch((err) => {
+        res.status(422).json(err);
+    });
+});
+
+// Creamos una ruta para obtener las reservas del usuario autenticado
+app.get('/bookings', async (req, res) => {
+    const userData = await getUserDataFromReq(req);
+    res.json(await Booking.find({user: userData.id}).populate('place'));
+});
+
+
 
 app.listen(4000);

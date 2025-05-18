@@ -14,6 +14,7 @@ const placeSchema = new moongose.Schema({
     checkIn: Number,
     checkOut: Number,
     maxGuests: Number,
+    price: Number,
 });
 
 const PlaceModel = moongose.model('Place', placeSchema);

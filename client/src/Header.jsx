@@ -7,7 +7,7 @@ export default function Header() {
     return (
         <header className="flex justify-between">
         {/* Logo airbnb */}
-        <Link to={'/'} className="flex items-center gap-1">
+        <Link to={'/'} className="flex items-center gap-1 transition hover:text-primary">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -47,7 +47,7 @@ export default function Header() {
           </button>
         </div>
         {/* Hamburger and login icons */}
-        <Link to={user ? '/account' : '/login'} className="flex border border-gray-300 rounded-full py-1 px-4 gap-2 shadow-md shadow-gray-300 items-center">
+        <Link to={user ? '/account' : '/login'} className="flex border border-gray-300 rounded-full py-1 px-4 gap-2 transition hover:shadow-md hover:shadow-gray-300 items-center ">
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
