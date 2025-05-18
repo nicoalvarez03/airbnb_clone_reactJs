@@ -20,7 +20,7 @@ export default function ProfilePage() {
   }
 
   if (!ready) {
-    return <div>Loading...</div>;
+    return <div>Cargando...</div>;
   }
 
   if (ready && !user && !redirect) {
@@ -38,12 +38,12 @@ export default function ProfilePage() {
 
       {subpage === "profile" && (
         <div className="text-center max-w-lg mx-auto flex flex-col items-center">
-          Logged in as {user.name} ({user.email})
+          Usuario logeado: {user.name} ({user.email})
           <button
             onClick={logout}
             className="bg-primary text-white py-1 rounded-full w-100 max-w-sm mt-2 cursor-pointer"
           >
-            Logout
+            Cerrar sesión
           </button>
         </div>
       )}

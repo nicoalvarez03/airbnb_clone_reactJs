@@ -95,50 +95,50 @@ export default function PlacesFormPage() {
         <AccountNav />
       <form onSubmit={savePlace}>
         {preInput(
-          "Title",
-          "Title for your places. Should be short and catchy as in advertisement"
+          "Título",
+          "Título de tu alojamiento. Debe ser breve y atractivo, como un anuncio."
         )}
         <input
           type="text"
-          placeholder="Title, for example: My lovely apt"
+          placeholder="Título, ej: Apartamento en el centro"
           value={title}
           onChange={(ev) => setTitle(ev.target.value)}
         />
-        {preInput("Address", "Address to this places")}
+        {preInput("Dirección", "Dirección exacta de tu alojamiento")}
         <input
           type="text"
-          placeholder="Address"
+          placeholder="Dirección"
           value={address}
           onChange={(ev) => setAddress(ev.target.value)}
         />
-        {preInput("Photos", "More = better")}
+        {preInput("Fotos", "Más = Mejor")}
         <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
-        {preInput("Description", "Describe your place")}
+        {preInput("Descripción", "Describe tu alojamiento")}
         <textarea
-          placeholder="Description"
+          placeholder="Descripción"
           value={description}
           onChange={(ev) => setDescription(ev.target.value)}
         />
-        {preInput("Perks", "Select all the perks of your place")}
+        {preInput("Beneficios", "Selecciona todos los beneficios de tu alojamiento")}
         <div className="grid mt-2 gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           <Perks selected={perks} onChange={setPerks} />
         </div>
         {preInput(
-          "Extra info",
-          "Anything else you want to share about your place"
+          "Información extra",
+          "¿Algo más que los huéspedes deban saber? ¿Hay algún coste adicional? ¿Hay algo que no se puede hacer en el alojamiento?"
         )}
         <textarea
-          placeholder="Extra info"
+          placeholder="Información extra"
           value={extraInfo}
           onChange={(ev) => setExtraInfo(ev.target.value)}
         />
         {preInput(
-          "Check in&out times",
-          "Add check in and out times, remember to have some time window for cleaning the room between guests"
+          "Check In & Check Out",
+          "Añade un check in y check out para tu alojamiento. Recuerda tener un intervalo de tiempo para limpiar el mismo entre huéspedes."
         )}
         <div className="grid gap-2 grid-cols-2 md:grid-cols-4">
           <div>
-            <h3 className="mt-2 -mb-1">Check in time</h3>
+            <h3 className="mt-2 -mb-1">Check In</h3>
             <input
               type="text"
               placeholder="14:00 PM"
@@ -147,7 +147,7 @@ export default function PlacesFormPage() {
             />
           </div>
           <div>
-            <h3 className="mt-2 -mb-1">Check out time</h3>
+            <h3 className="mt-2 -mb-1">Check Out</h3>
             <input
               type="text"
               placeholder="12:00 AM"
@@ -156,7 +156,7 @@ export default function PlacesFormPage() {
             />
           </div>
           <div>
-            <h3 className="mt-2 -mb-1">Max number of guests</h3>
+            <h3 className="mt-2 -mb-1">Número máximo de huéspedes</h3>
             <input
               type="number"
               value={maxGuests}
@@ -164,7 +164,7 @@ export default function PlacesFormPage() {
             />
           </div>
           <div>
-            <h3 className="mt-2 -mb-1">Price per night</h3>
+            <h3 className="mt-2 -mb-1">Precio por noche</h3>
             <input
               type="number"
               value={price}
@@ -173,7 +173,7 @@ export default function PlacesFormPage() {
           </div>
 
         </div>
-        <button className="button-primary my-4 ">Save</button>
+        <button className="button-primary my-4 ">Guardar</button>
       </form>
     </div>
   );

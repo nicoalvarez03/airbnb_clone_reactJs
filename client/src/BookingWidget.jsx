@@ -48,12 +48,12 @@ export default function BookingWidget({ place }) {
   return (
     <div className="bg-white shadow p-4 rounded-2xl">
       <div className="text-2xl text-center">
-        Price: ${place.price} / per night
+        Precio: ${place.price} / por noche
       </div>
       <div className="border border-gray-200 rounded-2xl mt-4">
         <div className="flex">
           <div className="py-3 px-4">
-            <label>Check-in </label>
+            <label>Check-in: </label>
             <input
               type="date"
               value={checkIn}
@@ -61,7 +61,7 @@ export default function BookingWidget({ place }) {
             />
           </div>
           <div className="py-3 px-4 border-l border-gray-200">
-            <label>Check-out </label>
+            <label>Check-out: </label>
             <input
               type="date"
               value={checkOut}
@@ -70,7 +70,7 @@ export default function BookingWidget({ place }) {
           </div>
         </div>
         <div className="py-3 px-4 border-t border-gray-200">
-          <label>Number of guests: </label>
+          <label>Numero de huéspedes: </label>
           <input
             type="number"
             value={numberOfGuests}
@@ -79,14 +79,14 @@ export default function BookingWidget({ place }) {
         </div>
         {numberOfNigths > 0 && (
           <div className="py-3 px-4 border-t border-gray-200">
-            <label>Your full name: </label>
+            <label>Nombre completo: </label>
             <input
               type="text"
               placeholder="John Doe"
               value={name}
               onChange={(ev) => setName(ev.target.value)}
             />
-            <label>Phone number: </label>
+            <label>Número de teléfono: </label>
             <input
               type="tel"
               placeholder="123456789"
@@ -99,10 +99,10 @@ export default function BookingWidget({ place }) {
 
       <button className="button-primary mt-4"
         onClick={bookThisPlace}>
-        Book this place
+        Reserva este lugar por:
         {numberOfNigths > 0 && (
           <>
-            <span> ${numberOfNigths * place.price}</span>
+            <span className="font-bold"> ${numberOfNigths * place.price}</span>
           </>
         )}
       </button>

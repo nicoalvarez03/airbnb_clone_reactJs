@@ -34,7 +34,7 @@ export default function LoginPage() {
   return (
     <div className="mt-4 grow flex items-center justify-around">
       <div className="mb-64">
-        <h1 className="text-4xl text-center mb-4">Login</h1>
+        <h1 className="text-4xl text-center mb-4">Iniciar sesión</h1>
         <form className="max-w-md mx-auto" onSubmit={handleLoginSubmit}>
           <input
             type="email"
@@ -52,12 +52,12 @@ export default function LoginPage() {
             Login
           </button>
           <div className="py-2 text-center text-gray-500">
-            Don't have an account yet?
+            ¿Aún no tienes una cuenta?
             <Link
               to={"/register"}
               className="ml-1 underline text-black font-semibold"
             >
-              Register now
+              Registrate
             </Link>
           </div>
         </form>

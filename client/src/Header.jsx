@@ -26,9 +26,9 @@ export default function Header() {
         </Link>
         {/* Medium component */}
         <div className="flex items-center border border-gray-300 rounded-full py-1 px-4 shadow-md shadow-gray-300">
-          <div className="border-r border-gray-300 px-2">Anywhere</div>
-          <div className="px-2 border-r border-gray-300">Any Week</div>
-          <div className="px-2">Add guests</div>
+          <div className="border-r border-gray-300 px-2">Cualquier lugar</div>
+          <div className="px-2 border-r border-gray-300">Cualquier fecha</div>
+          <div className="px-2">Añade viajeros</div>
           <button className="bg-primary text-white rounded-full p-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"

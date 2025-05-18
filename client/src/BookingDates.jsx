@@ -21,7 +21,7 @@ export default function BookingDates({booking,className}) {
         new Date(booking.checkOut),
         new Date(booking.checkIn)
       )}{" "}
-      nights:
+      noches:
       <div className="flex gap-1 items-center ml-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -27,7 +27,7 @@ export default function PlaceGallery({place}){
                       d="M6 18 18 6M6 6l12 12"
                     />
                   </svg>
-                  Close photos
+                  Cerrar fotos
                 </button>
               </div>
               {place?.photos?.length > 0 &&
@@ -114,7 +114,7 @@ export default function PlaceGallery({place}){
               d="M3 11.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm5 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm5 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-10-5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm5 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm5 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-10-5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm5 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm5 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"
             ></path>
           </svg>
-          Show more photos
+          Mostrar más fotos
         </button>
       </div>
     )

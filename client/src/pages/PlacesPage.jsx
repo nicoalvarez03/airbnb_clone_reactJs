@@ -32,7 +32,7 @@ export default function PlacesPage() {
               clipRule="evenodd"
             />
           </svg>
-          Add new place
+          Añadir nuevo alojamiento
         </Link>
       </div>
       <div className="mt-4">
