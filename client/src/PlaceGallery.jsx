@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 
@@ -15,14 +15,32 @@ export default function PlaceGallery({place}){
       instanceRef.current?.prev();
     };
 
+    useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          setShowAllPhotos(false);
+          document.body.style.overflow = '';
+        }
+      };
+    
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
     if (showAllPhotos)
+    {
+      document.body.style.overflow = 'hidden';
+    
         return (
-          <div className="absolute inset-0 text-white bg-black h-screen w-full z-[9999]">
+          <div className="fixed inset-0 text-white bg-black h-screen w-full z-[9999]">
             <div className="bg-black p-8 grid gap-4">
               <div>
                 <h2 className="text-3xl mr-48">Photos of {place.title}</h2>
                 <button
-                  onClick={() => setShowAllPhotos(false)}
+                  onClick={() => {
+                    setShowAllPhotos(false);
+                    document.body.style.overflow = '';
+                  }}
                   className="fixed right-12 top-8 flex gap-1 items-center py-2 px-4 rounded-2xl shadow shadow-black bg-white text-black cursor-pointer"
                 >
                   <svg
@@ -85,6 +103,7 @@ export default function PlaceGallery({place}){
             </div>
           </div>
         );
+      }
 
         
     return(
