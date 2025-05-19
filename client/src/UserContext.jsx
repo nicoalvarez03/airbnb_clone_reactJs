@@ -11,11 +11,11 @@ export function UserContextProvider({ children }) {
         if(!user){
             axios.get('/profile')
                 .then(({data}) => {
-                    setUser(data || {});
+                    setUser(data);
                 })
                 .catch(err => {
                     console.error(err);
-                    setUser({});
+                    setUser(null);
                 })
                 .finally(() => {
                     setReady(true);
