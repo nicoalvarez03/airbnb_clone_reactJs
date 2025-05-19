@@ -72,61 +72,39 @@ export default function BookingWidget({ place }) {
         Precio: ${place.price} / por noche
       </div>
       <div className="border border-gray-200 rounded-2xl mt-4">
-        <div className="flex">
-          <div className="py-3 px-4">
-            {/* Date Picker Component */}
+        
+        <div className="flex flex-col sm:flex-row">
+          <div className="w-full sm:w-1/2 py-3 px-4">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Box
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  position: 'relative',
+              <DatePicker 
+                slotProps={{
+                  field: { clearable: true, onClear: () => setCleared(true) },
                 }}
-              >
-                <DemoContainer components={['DatePicker', 'DatePicker']}>
-                  <DatePicker 
-                    slotProps={{
-                      field: {clearable: true, onClear: () => setCleared(true) },
-                    }}
-                    label="Check-in"
-                    value={checkIn}
-                    onChange={(newValue) => setCheckIn(newValue)}
-                    format="DD/MM/YYYY"
-                  />
-                </DemoContainer>
-              </Box>
+                label="Check-in"
+                value={checkIn}
+                onChange={(newValue) => setCheckIn(newValue)}
+                format="DD/MM/YYYY"
+                sx={{ width: '100%' }}
+              />
             </LocalizationProvider>
           </div>
-          
-          <div className="py-3 px-4 border-l border-gray-200">
-            {/* Date Picker Component */}
+
+          <div className="w-full sm:w-1/2 py-3 px-4 border-t sm:border-t-0 sm:border-l border-gray-200">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Box
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  position: 'relative',
+              <DatePicker 
+                slotProps={{
+                  field: { clearable: true, onClear: () => setCleared(true) },
                 }}
-              >
-                <DemoContainer components={['DatePicker', 'DatePicker']}>
-                  <DatePicker 
-                    slotProps={{
-                      field: {clearable: true, onClear: () => setCleared(true) },
-                    }}
-                    label="Check-out"
-                    value={checkOut}
-                    onChange={(newValue) => setCheckOut(newValue)}
-                    format="DD/MM/YYYY"
-                  />
-                </DemoContainer>
-              </Box>
+                label="Check-out"
+                value={checkOut}
+                onChange={(newValue) => setCheckOut(newValue)}
+                format="DD/MM/YYYY"
+                sx={{ width: '100%' }}
+              />
             </LocalizationProvider>
           </div>
         </div>
+
         <div className="py-3 px-4 border-t border-gray-200">
           <label>Numero de huéspedes: </label>
           <input
