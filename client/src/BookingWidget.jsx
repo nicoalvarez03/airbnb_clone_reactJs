@@ -4,9 +4,18 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
+
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Box from '@mui/material/Box';
+
+
 export default function BookingWidget({ place }) {
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
+  const [checkIn, setCheckIn] = useState(null);
+  const [checkOut, setCheckOut] = useState(null);
+  const [cleared, setCleared] = React.useState(false);
   const [numberOfGuests, setNumberOfGuests] = useState(1);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -19,18 +28,30 @@ export default function BookingWidget({ place }) {
     }
   }, [user])
 
+  useEffect(() => {
+    if(cleared){
+      const timeout = setTimeout(() => {
+        setCleared(false);
+      }, 1500);
+
+      return () => clearTimeout(timeout);
+    }
+    return () => {};
+
+  }, [cleared]);
+
   let numberOfNigths = 0;
   if (checkIn && checkOut) {
     numberOfNigths = differenceInCalendarDays(
-      new Date(checkOut),
-      new Date(checkIn)
+      checkOut.toDate(),
+      checkIn.toDate()
     );
   }
 
   async function bookThisPlace() {
     const response = await axios.post('/bookings', {
-      checkIn, 
-      checkOut, 
+      checkIn: checkIn.toISOString(), 
+      checkOut: checkOut.toISOString(), 
       numberOfGuests, 
       name, 
       phone, 
@@ -53,20 +74,68 @@ export default function BookingWidget({ place }) {
       <div className="border border-gray-200 rounded-2xl mt-4">
         <div className="flex">
           <div className="py-3 px-4">
-            <label>Check-in: </label>
+            {/* <label>Check-in: </label>
             <input
               type="date"
               value={checkIn}
               onChange={(ev) => setCheckIn(ev.target.value)}
-            />
+            /> */}
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  position: 'relative',
+                }}
+              >
+                <DemoContainer components={['DatePicker', 'DatePicker']}>
+                  <DatePicker 
+                    slotProps={{
+                      field: {clearable: true, onClear: () => setCleared(true) },
+                    }}
+                    label="Check-in"
+                    value={checkIn}
+                    onChange={(newValue) => setCheckIn(newValue)}
+                    format="DD/MM/YYYY"
+                  />
+                </DemoContainer>
+              </Box>
+            </LocalizationProvider>
           </div>
           <div className="py-3 px-4 border-l border-gray-200">
-            <label>Check-out: </label>
+            {/* <label>Check-out: </label>
             <input
               type="date"
               value={checkOut}
               onChange={(ev) => setCheckOut(ev.target.value)}
-            />
+            /> */}
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  position: 'relative',
+                }}
+              >
+                <DemoContainer components={['DatePicker', 'DatePicker']}>
+                  <DatePicker 
+                    slotProps={{
+                      field: {clearable: true, onClear: () => setCleared(true) },
+                    }}
+                    label="Check-out"
+                    value={checkOut}
+                    onChange={(newValue) => setCheckOut(newValue)}
+                    format="DD/MM/YYYY"
+                  />
+                </DemoContainer>
+              </Box>
+            </LocalizationProvider>
           </div>
         </div>
         <div className="py-3 px-4 border-t border-gray-200">
@@ -97,8 +166,13 @@ export default function BookingWidget({ place }) {
         )}
       </div>
 
-      <button className="button-primary mt-4"
-        onClick={bookThisPlace}>
+      <button className={`button-primary mt-4 transition ${
+          numberOfNigths === 0 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-[#ff5f92]'
+        }`}
+        onClick={bookThisPlace}
+        disabled={numberOfNigths === 0}
+        >
+          
         Reserva este lugar por:
         {numberOfNigths > 0 && (
           <>
