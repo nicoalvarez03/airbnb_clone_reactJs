@@ -42,12 +42,6 @@ export default function PlaceGallery({place}){
                   Cerrar fotos
                 </button>
               </div>
-              {/* {place?.photos?.length > 0 &&
-                place.photos.map((photo) => (
-                  <div key={photo} className="flex justify-center">
-                    <img src={"http://localhost:4000/uploads/" + photo} alt="" width={1000}/>
-                  </div>
-                ))} */}
 
           
           <div ref={sliderRef} className="keen-slider mt-8">
@@ -64,26 +58,30 @@ export default function PlaceGallery({place}){
               </div>
             ))}
           </div>
-          {/* Botones Prev / Next */}
-          <button
-              onClick={prevSlide}
-              className="absolute left-50 top-1/2 transform -translate-y-1/2  text-white p-2 rounded-full shadow-lg hover:bg-gray-600 hover:text-black cursor-pointer  z-50"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
-              </svg>
 
-
-            </button>
+          <div className="absolute left-50 top-1/2 transform -translate-y-1/2 border-1 flex items-center justify-center text-white rounded-full shadow-lg hover:bg-white/40 transition z-50">
             <button
-              onClick={nextSlide}
-              className="absolute right-50 top-1/2 transform -translate-y-1/2 text-white p-2 rounded-full shadow-lg hover:bg-gray-600 hover:text-black cursor-pointer z-50"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                <path fillRule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clipRule="evenodd" />
-              </svg>
-
+                onClick={prevSlide}
+                className="p-4 cursor-pointer"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
+                  <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
+                </svg>
             </button>
+          </div>
+
+
+            <div className="absolute right-50 top-1/2 transform -translate-y-1/2 border-1 flex items-center justify-center text-white rounded-full shadow-lg hover:bg-white/40 transition z-50">
+              <button
+                onClick={nextSlide}
+                className="p-4 cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
+                  <path fillRule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clipRule="evenodd" />
+                </svg>
+
+              </button>
+            </div>
             </div>
           </div>
         );
