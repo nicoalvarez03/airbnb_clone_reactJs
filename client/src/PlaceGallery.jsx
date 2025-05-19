@@ -1,11 +1,23 @@
 import { useState } from "react";
+import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
 
 export default function PlaceGallery({place}){
     const [showAllPhotos, setShowAllPhotos] = useState(false);
+    const [sliderRef, instanceRef] = useKeenSlider({loop: true});
+
+
+    const nextSlide = () => {
+      instanceRef.current?.next();
+    };
+  
+    const prevSlide = () => {
+      instanceRef.current?.prev();
+    };
 
     if (showAllPhotos)
         return (
-          <div className="absolute inset-0 text-white min-h-screen z-[9999]">
+          <div className="absolute inset-0 text-white bg-black h-screen w-full z-[9999]">
             <div className="bg-black p-8 grid gap-4">
               <div>
                 <h2 className="text-3xl mr-48">Photos of {place.title}</h2>
@@ -30,12 +42,46 @@ export default function PlaceGallery({place}){
                   Cerrar fotos
                 </button>
               </div>
-              {place?.photos?.length > 0 &&
-                place.photos.map((photo) => (
-                  <div key={photo} className="flex justify-center">
-                    <img src={"http://localhost:4000/uploads/" + photo} alt="" width={1000}/>
-                  </div>
-                ))}
+
+          
+          <div ref={sliderRef} className="keen-slider mt-8">
+            {place?.photos?.map((photo) => (
+              <div
+                key={photo}
+                className="keen-slider__slide flex justify-center"
+              >
+                <img
+                  src={`http://localhost:4000/uploads/${photo}`}
+                  alt=""
+                  className="max-h-[80vh] rounded-xl"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="absolute left-50 top-1/2 transform -translate-y-1/2 border-1 flex items-center justify-center text-white rounded-full shadow-lg hover:bg-white/40 transition z-50">
+            <button
+                onClick={prevSlide}
+                className="p-4 cursor-pointer"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
+                  <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
+                </svg>
+            </button>
+          </div>
+
+
+            <div className="absolute right-50 top-1/2 transform -translate-y-1/2 border-1 flex items-center justify-center text-white rounded-full shadow-lg hover:bg-white/40 transition z-50">
+              <button
+                onClick={nextSlide}
+                className="p-4 cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
+                  <path fillRule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clipRule="evenodd" />
+                </svg>
+
+              </button>
+            </div>
             </div>
           </div>
         );
