@@ -74,13 +74,7 @@ export default function BookingWidget({ place }) {
       <div className="border border-gray-200 rounded-2xl mt-4">
         <div className="flex">
           <div className="py-3 px-4">
-            {/* <label>Check-in: </label>
-            <input
-              type="date"
-              value={checkIn}
-              onChange={(ev) => setCheckIn(ev.target.value)}
-            /> */}
-
+            {/* Date Picker Component */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Box
                 sx={{
@@ -105,14 +99,9 @@ export default function BookingWidget({ place }) {
               </Box>
             </LocalizationProvider>
           </div>
+          
           <div className="py-3 px-4 border-l border-gray-200">
-            {/* <label>Check-out: </label>
-            <input
-              type="date"
-              value={checkOut}
-              onChange={(ev) => setCheckOut(ev.target.value)}
-            /> */}
-
+            {/* Date Picker Component */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Box
                 sx={{
@@ -142,6 +131,7 @@ export default function BookingWidget({ place }) {
           <label>Numero de huéspedes: </label>
           <input
             type="number"
+            min={1}
             value={numberOfGuests}
             onChange={(ev) => setNumberOfGuests(ev.target.value)}
           />
@@ -167,7 +157,7 @@ export default function BookingWidget({ place }) {
       </div>
 
       <button className={`button-primary mt-4 transition ${
-          numberOfNigths === 0 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-[#ff5f92]'
+          numberOfNigths === 0 && user ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-[#ff5f92]'
         }`}
         onClick={bookThisPlace}
         disabled={numberOfNigths === 0}
