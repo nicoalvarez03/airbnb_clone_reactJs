@@ -34,7 +34,7 @@ export default function IndexPage() {
   }, []);
 
   return (
-    <div className="mt-8 grid gap-x-6 gap-y-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+    <div className="mt-8 px-5 grid gap-x-6 gap-y-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
       {loading
         ? Array.from({ length: places.length }).map((_, index) => <SkeletonCard key={index} />)
         : places.map((place) => (
