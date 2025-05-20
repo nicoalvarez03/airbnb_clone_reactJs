@@ -19,8 +19,8 @@ export default function PlacePage() {
   if (!place) return "";
 
   return (
-    <div className="mt-4 border-t border-gray-300 bg-gray-50 -mx-24 w-screen px-32 pt-8">
-      <h1 className="text-3xl">{place.title}</h1>
+    <div className="mt-4 border-t w-full px-5 border-gray-300 bg-gray-50 md:-mx-24 md:w-screen md:px-32 pt-8">
+      <h1 className="text-xl md:text-3xl">{place.title}</h1>
       
       <AddressLink>{place.address}</AddressLink>
       
