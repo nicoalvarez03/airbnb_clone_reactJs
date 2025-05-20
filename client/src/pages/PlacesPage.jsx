@@ -12,6 +12,7 @@ export default function PlacesPage() {
     });
   }, []);
 
+
   return (
     <div>
       <AccountNav />
@@ -35,17 +36,17 @@ export default function PlacesPage() {
           Añadir nuevo alojamiento
         </Link>
       </div>
-      <div className="mt-4">
+      <div className="mt-4 px-5">
         {places.length > 0 &&
           places.map((place) => (
-            <Link to={'/account/places/'+place._id} className="flex cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl" key={place._id}>
-              <div className="flex w-32 h-32 shrink-0">
+            <Link to={'/account/places/'+place._id} className="flex flex-col md:flex-row cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl my-3" key={place._id}>
+              <div className="flex w-full h-32 md:w-32 shrink-0">
                 <PlaceImg place={place} />
               </div>
               <div className="grow-0 shrink">
                 <h2 className="text-xl font-semibold">
                   {place.title}
-                  <p className="text-sm font-normal mt-2">
+                  <p className="cardText text-sm font-normal mt-2 line-clamp-5">
                     {place.description}
                   </p>
                 </h2>
