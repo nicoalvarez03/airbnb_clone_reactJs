@@ -4,6 +4,7 @@ import Perks from "../Perks";
 import PhotosUploader from "../PhotosUploeader";
 import AccountNav from "../AccountNav";
 import { Navigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function PlacesFormPage() {
   const {id} = useParams();
@@ -40,8 +41,10 @@ export default function PlacesFormPage() {
   
 
   // Se crea una funcion para generar el header de los inputs
-  function inputHeader(text) {
-    return <h2 className="text-2xl mt-4">{text}</h2>;
+  function inputHeader(text, isRequired = false) {
+    return isRequired ? 
+      <h2 className="text-2xl mt-4">{text} <span className="text-red-500 font-semibold">*</span></h2> 
+        : <h2 className="text-2xl mt-4">{text}</h2>;
   }
 
   // Se crea una funcion para generar la descripcion de los inputs
@@ -50,10 +53,10 @@ export default function PlacesFormPage() {
   }
 
   // Se crea una funcion para generar el header y la descripcion de los inputs
-  function preInput(header, description) {
+  function preInput(header, description, isRequired = false) {
     return (
       <>
-        {inputHeader(header)}
+        {inputHeader(header, isRequired)}
         {inputDescription(description)}
       </>
     );
@@ -61,28 +64,41 @@ export default function PlacesFormPage() {
 
   async function savePlace(ev) {
     ev.preventDefault();
-    const placeData = {
-        title,
-        address,
-        addedPhotos,
-        description,
-        perks,
-        extraInfo,
-        checkIn,
-        checkOut,
-        maxGuests,
-        price,
-    }
-    if (id) {
-      // Actualizar un lugar existente
-      await axios.put("/places", {
-        id, ...placeData
-      });
-      setRedirect(true);
-    }else{
-      // Crear un nuevo lugar
-      await axios.post("/places", placeData);
-      setRedirect(true);
+
+    try {
+      if (!title || !address || !addedPhotos.length || !description || perks.length === 0 || !checkIn || !checkOut || !maxGuests || !price) {
+        toast.error("Por favor, debe completar todos los campos obligatorios");
+        return;
+      }else{
+
+        const placeData = {
+            title,
+            address,
+            addedPhotos,
+            description,
+            perks,
+            extraInfo,
+            checkIn,
+            checkOut,
+            maxGuests,
+            price,
+        }
+        if (id) {
+          // Actualizar un lugar existente
+          await axios.put("/places", {
+            id, ...placeData
+          });
+          setRedirect(true);
+        }else{
+          // Crear un nuevo lugar
+          await axios.post("/places", placeData);
+          setRedirect(true);
+        }
+        toast.success("Lugar guardado con éxito");
+      }
+  }catch (e) {
+      alert("Error al guardar el lugar");
+      console.error(e);
     }
   }
 
@@ -93,9 +109,10 @@ export default function PlacesFormPage() {
   return (
     <div>
         <AccountNav />
-      <form onSubmit={savePlace}>
+      <form className="px-5" onSubmit={savePlace}>
         {preInput(
-          "Título",
+          `Título`,
+          true,
           "Título de tu alojamiento. Debe ser breve y atractivo, como un anuncio."
         )}
         <input
@@ -104,22 +121,22 @@ export default function PlacesFormPage() {
           value={title}
           onChange={(ev) => setTitle(ev.target.value)}
         />
-        {preInput("Dirección", "Dirección exacta de tu alojamiento")}
+        {preInput("Dirección", true, "Dirección exacta de tu alojamiento")}
         <input
           type="text"
           placeholder="Dirección"
           value={address}
           onChange={(ev) => setAddress(ev.target.value)}
         />
-        {preInput("Fotos", "Más = Mejor")}
+        {preInput("Fotos", true, "Más = Mejor")}
         <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
-        {preInput("Descripción", "Describe tu alojamiento")}
+        {preInput("Descripción", true, "Describe tu alojamiento")}
         <textarea
           placeholder="Descripción"
           value={description}
           onChange={(ev) => setDescription(ev.target.value)}
         />
-        {preInput("Beneficios", "Selecciona todos los beneficios de tu alojamiento")}
+        {preInput("Beneficios", true, "Selecciona todos los beneficios de tu alojamiento")}
         <div className="grid mt-2 gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           <Perks selected={perks} onChange={setPerks} />
         </div>
@@ -133,7 +150,7 @@ export default function PlacesFormPage() {
           onChange={(ev) => setExtraInfo(ev.target.value)}
         />
         {preInput(
-          "Check In & Check Out",
+          "Check In & Check Out", true,
           "Añade un check in y check out para tu alojamiento. Recuerda tener un intervalo de tiempo para limpiar el mismo entre huéspedes."
         )}
         <div className="grid gap-2 grid-cols-2 md:grid-cols-4">
@@ -156,7 +173,7 @@ export default function PlacesFormPage() {
             />
           </div>
           <div>
-            <h3 className="mt-2 -mb-1">Número máximo de huéspedes</h3>
+            <h3 className="mt-2 -mb-1">Cantidad de huéspedes</h3>
             <input
               type="number"
               value={maxGuests}
