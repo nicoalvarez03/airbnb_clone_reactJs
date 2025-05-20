@@ -14,16 +14,24 @@ export default function RegisterPage() {
     ev.preventDefault();
     // Se hace una peticion POST a la API para registrar un usuario
     try{
+      if(!name || !email || !password){
+        toast.error('Por favor completa todos los campos');
+        return;
+
+      }else{
         await axios.post('/register', {
-            name, 
-            email, 
-            password
+          name, 
+          email, 
+          password
         });
 
-        // Se redirige al usuario a la pagina de inicio de sesion
         toast.success(`Usuario '${name}' registrado con éxito`);
-
+        
+        // Se redirige al usuario a la pagina de inicio de sesion
         setRedirect(true);
+      }
+
+        
     }catch(e){
         toast.error('Error al registrar el usuario. El email ya existe.');
         console.error(e);
