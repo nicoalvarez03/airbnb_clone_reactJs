@@ -23,19 +23,19 @@ export default function BookingsPage() {
             <Link
               to={`/account/bookings/${booking._id}`}
               key={booking._id}
-              className="flex justify-center"
+              className="flex justify-center px-5"
             >
-              <div className="bg-gray-200 rounded-2xl overflow-hidden mt-4 flex w-300 gap-4">              
-                <div className="w-48">
+              <div className="bg-gray-200 rounded-2xl overflow-hidden mt-4 flex flex-col md:flex-row w-300 gap-4">              
+                <div className="w-full object-cover md:w-48">
                   <PlaceImg place={booking.place} />
                 </div>
-                <div className="py-3 pr-3 grow">
-                  <h2 className="text-xl font-bold">{booking.place.title}</h2>
+                <div className="flex flex-col items-center md:block py-3 pr-3 grow">
+                  <h2 className="text-xl font-bold text-center md:text-start">{booking.place.title}</h2>
                   <div className="items-center">
 
                     <BookingDates booking={booking} className="mb-2 mt-4 text-gray-500" />
 
-                    <div className="flex gap-1 items-center">
+                    <div className="flex gap-1 items-center justify-center md:justify-start">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
