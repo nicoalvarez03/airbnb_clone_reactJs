@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [redirect, setRedirect] = useState(false);
+
   // Se crea una funcion para registrar un usuario
   async function registerUser(ev){
     ev.preventDefault();
@@ -16,12 +19,26 @@ export default function RegisterPage() {
             email, 
             password
         });
+
+        // Se redirige al usuario a la pagina de inicio de sesion
+        toast.success(`Usuario '${name}' registrado con éxito`);
+
+        setRedirect(true);
     }catch(e){
-        alert('Registration failed. Please try again later');
+        toast.error('Error al registrar el usuario. El email ya existe.');
         console.error(e);
     }
-    alert('Registration successful. Now you can login');
+      // Se limpian los campos de entrada
+      setName('');
+      setEmail('');
+      setPassword('');
+    
   }
+
+  if(redirect){
+    return <Navigate to={"/login"} />
+  }
+
   return (
     <div className="mt-4 grow flex items-center justify-around">
       <div className="mb-64">
