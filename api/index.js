@@ -268,6 +268,34 @@ app.delete('/bookings/:id', async (req, res) => {
     }
   });
 
+// Creamos una ruta para eliminar un alojamiento y sus reservas
+app.delete('/places/:id', async (req, res) => {
+    const userData = await getUserDataFromReq(req);
+    const { id } = req.params;
+  
+    try {
+      const place = await Place.findById(id);
+      if (!place) {
+        return res.status(404).json({ error: 'Alojamiento no encontrado' });
+      }
+  
+      // Verificamos que el usuario sea el dueño del alojamiento
+      if (place.owner.toString() !== userData.id) {
+        return res.status(403).json({ error: 'No autorizado' });
+      }
+  
+      // Eliminamos las reservas relacionadas
+      await Booking.deleteMany({ place: id });
+  
+      // Luego eliminamos el alojamiento
+      await place.deleteOne();
+  
+      res.json({ success: true });
+    } catch (err) {
+      res.status(500).json({ error: 'Error al eliminar el alojamiento y reservas' });
+    }
+  });
+
 
 
 app.listen(4000);

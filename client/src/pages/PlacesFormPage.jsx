@@ -5,6 +5,7 @@ import PhotosUploader from "../PhotosUploeader";
 import AccountNav from "../AccountNav";
 import { Navigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import DeleteModal from "../DeleteModal";
 
 export default function PlacesFormPage() {
   const {id} = useParams();
@@ -18,7 +19,10 @@ export default function PlacesFormPage() {
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(1);
   const [price, setPrice] = useState(100);
-  const [redirect, setRedirect] = useState(false);
+  const [redirect, setRedirect] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+
 
   useEffect(() => {
     if(!id){
@@ -62,9 +66,9 @@ export default function PlacesFormPage() {
     );
   }
 
+  // Se crea una funcion para guardar el lugar o actualizarlo
   async function savePlace(ev) {
     ev.preventDefault();
-
     try {
       if (!title || !address || !addedPhotos.length || !description || perks.length === 0 || !checkIn || !checkOut || !maxGuests || !price) {
         toast.error("Por favor, debe completar todos los campos obligatorios");
@@ -102,6 +106,13 @@ export default function PlacesFormPage() {
     }
   }
 
+  // Se crea una funcion para eliminar un alojamiento
+  async function deletePlace() {
+        await axios.delete(`/places/${id}`);
+        toast.success("Alojamiento eliminado con éxito");
+        setRedirect(true);
+  }
+
   if (redirect) {
     return <Navigate to="/account/places" />;
   }
@@ -109,7 +120,7 @@ export default function PlacesFormPage() {
   return (
     <div>
         <AccountNav />
-      <form className="px-5" onSubmit={savePlace}>
+      <form className="px-5">
         {preInput(
           `Título`,
           true,
@@ -190,8 +201,31 @@ export default function PlacesFormPage() {
           </div>
 
         </div>
-        <button className="button-primary my-4 ">Guardar</button>
+        <div className="flex flex-col-reverse md:flex-row md:gap-5 mt-4">
+          <button
+              type="button"
+              className={`button-primary bg-gray-500 cursor-pointer hover:bg-gray-400 ${!id ? 'hidden cursor-not-allowed' : ''}`}
+              onClick={() => id && setModalOpen(true)}
+            >
+              Eliminar alojamiento
+          </button>
+          <button 
+              className="button-primary cursor-pointer hover:bg-[#ff5f92]"
+              onClick={savePlace}
+              >
+              Guardar
+          </button>
+        </div>
+
+       
       </form>
+      <DeleteModal 
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onDelete={deletePlace}
+          title={"¿Estás seguro de que deseas eliminar este alojamiento?"}
+        />
+      
     </div>
   );
 }
