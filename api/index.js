@@ -247,6 +247,27 @@ app.get('/bookings', async (req, res) => {
     res.json(await Booking.find({user: userData.id}).populate('place'));
 });
 
+// Creamos una ruta para eliminar una reserva
+app.delete('/bookings/:id', async (req, res) => {
+    const userData = await getUserDataFromReq(req);
+    const { id } = req.params;
+  
+    try {
+      const booking = await Booking.findById(id);
+      if (!booking) {
+        return res.status(404).json({ error: 'Reserva no encontrada' });
+      }
+      if (booking.user.toString() !== userData.id) {
+        return res.status(403).json({ error: 'No autorizado' });
+      }
+  
+      await booking.deleteOne();
+      res.json({ success: true });
+    } catch (err) {
+      res.status(500).json({ error: 'Error al eliminar la reserva' });
+    }
+  });
+
 
 
 app.listen(4000);
