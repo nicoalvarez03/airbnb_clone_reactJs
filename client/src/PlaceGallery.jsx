@@ -32,10 +32,10 @@ export default function PlaceGallery({place}){
       document.body.style.overflow = 'hidden';
     
         return (
-          <div className="fixed inset-0 text-white bg-black h-screen w-full z-[9999]">
-            <div className="bg-black p-8 grid gap-4">
+          <div className="fixed inset-0 text-white bg-black md:h-screen w-full z-[9999]">
+            <div className="bg-black md:p-8 grid md:gap-4">
               <div>
-                <h2 className="text-3xl mr-48">Photos of {place.title}</h2>
+                <h2 className="hidden md:block text-3xl mr-48">Photos of {place.title}</h2>
                 <button
                   onClick={() => {
                     setShowAllPhotos(false);
@@ -62,22 +62,22 @@ export default function PlaceGallery({place}){
               </div>
 
           
-          <div ref={sliderRef} className="keen-slider mt-8">
+          <div ref={sliderRef} className="keen-slider flex mt-20 md:mt-8 h-[80vh]">
             {place?.photos?.map((photo) => (
               <div
                 key={photo}
-                className="keen-slider__slide flex justify-center"
+                className="keen-slider__slide flex justify-center items-center md:h-[80vh]"
               >
                 <img
                   src={`http://localhost:4000/uploads/${photo}`}
                   alt=""
-                  className="max-h-[80vh] rounded-xl"
+                  className="md:max-h-[80vh] md:rounded-xl"
                 />
               </div>
             ))}
           </div>
 
-          <div className="absolute left-50 top-1/2 transform -translate-y-1/2 border-1 flex items-center justify-center text-white rounded-full shadow-lg hover:bg-white/40 transition z-50">
+          <div className="hidden absolute left-50 top-1/2 transform -translate-y-1/2 border-1 md:flex items-center justify-center text-white rounded-full shadow-lg hover:bg-white/40 transition z-50">
             <button
                 onClick={prevSlide}
                 className="p-4 cursor-pointer"
@@ -89,7 +89,7 @@ export default function PlaceGallery({place}){
           </div>
 
 
-            <div className="absolute right-50 top-1/2 transform -translate-y-1/2 border-1 flex items-center justify-center text-white rounded-full shadow-lg hover:bg-white/40 transition z-50">
+            <div className="hidden absolute right-50 top-1/2 transform -translate-y-1/2 border-1 md:flex items-center justify-center text-white rounded-full shadow-lg hover:bg-white/40 transition z-50">
               <button
                 onClick={nextSlide}
                 className="p-4 cursor-pointer"
