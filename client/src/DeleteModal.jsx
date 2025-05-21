@@ -46,7 +46,7 @@ export default function DeleteModal({ isOpen, onClose, title, onDelete }) {
                     <X />
                   </button>
     
-                  <Dialog.Title className="text-xl md:text-2xl font-bold mb-4">
+                  <Dialog.Title className="text-xl text-center md:text-2xl font-bold mb-4">
                     {title}
                   </Dialog.Title>
     
@@ -62,7 +62,7 @@ export default function DeleteModal({ isOpen, onClose, title, onDelete }) {
                             onClick={onDelete}
                             className="button-primary w-30 md:w-50 cursor-pointer hover:bg-[#ff5f92] transition-all h-12"
                           >
-                          <span className="text-[12px] md:text-sm">Eliminar reserva</span>
+                          <span className="text-[12px] md:text-sm">Eliminar</span>
                           </button>
                       </div>
                   </div>

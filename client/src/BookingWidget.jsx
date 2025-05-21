@@ -3,14 +3,11 @@ import { differenceInCalendarDays } from "date-fns";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
-
-
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Box from '@mui/material/Box';
 import toast from "react-hot-toast";
+import dayjs from "dayjs";
 
 
 export default function BookingWidget({ place }) {
@@ -22,6 +19,9 @@ export default function BookingWidget({ place }) {
   const [phone, setPhone] = useState("");
   const [redirect, setRedirect] = useState("");
   const {user} = useContext(UserContext);
+
+  const today = dayjs(); // Fecha actual
+  const tomorrow = dayjs().add(1, 'day'); // Fecha de mañana
 
   useEffect(() => {
     if(user) {
@@ -57,6 +57,12 @@ export default function BookingWidget({ place }) {
         return;
       }else if(!name || !phone || !checkIn || !checkOut || !numberOfGuests){
         toast.error("Por favor, completa todos los campos");
+        return;
+      }else if(numberOfNigths <= 0){
+        toast.error("Por favor, selecciona fechas válidas");
+        return;
+      }else if(numberOfGuests > place.maxGuests || numberOfGuests < 1){
+        toast.error(`El número de huéspedes tiene que ser mínimo 1 y máximo ${place.maxGuests}`);
         return;
       }else{
         const response = await axios.post('/bookings', {
@@ -96,6 +102,8 @@ export default function BookingWidget({ place }) {
                 slotProps={{
                   field: { clearable: true, onClear: () => setCleared(true) },
                 }}
+                defaultValue={today}
+                disablePast
                 label="Check-in"
                 value={checkIn}
                 onChange={(newValue) => setCheckIn(newValue)}
@@ -112,12 +120,15 @@ export default function BookingWidget({ place }) {
                   field: { clearable: true, onClear: () => setCleared(true) },
                 }}
                 label="Check-out"
+                disablePast
+                minDate={checkIn ? dayjs(checkIn).add(1, 'day') : tomorrow}
                 value={checkOut}
                 onChange={(newValue) => setCheckOut(newValue)}
                 format="DD/MM/YYYY"
                 sx={{ width: '100%' }}
               />
             </LocalizationProvider>
+            
           </div>
         </div>
 
@@ -126,6 +137,7 @@ export default function BookingWidget({ place }) {
           <input
             type="number"
             min={1}
+            max={place.maxGuests}
             value={numberOfGuests}
             onChange={(ev) => setNumberOfGuests(ev.target.value)}
           />
