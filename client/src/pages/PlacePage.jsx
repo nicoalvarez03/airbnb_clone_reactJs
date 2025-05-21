@@ -4,10 +4,12 @@ import { Link, useParams } from "react-router-dom";
 import BookingWidget from "../BookingWidget";
 import PlaceGallery from "../PlaceGallery";
 import AddressLink from "../AddressLink";
+import InfoModal from "../InfoModal";
 
 export default function PlacePage() {
   const { id } = useParams();
   const [place, setPlace] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -29,24 +31,24 @@ export default function PlacePage() {
       <div className="mt-8 mb-8 grid gap-8 grid-cols-1 lg:grid-cols-[2fr_1fr]">
         <div>
           <div className="my-4 ">
-            <h2 className="font-semibold text-2xl">Descripción</h2>
-            {place.description}
+            <h2 className="font-semibold text-2xl ">Información del alojamiento</h2>
+            <span className="line-clamp-3 font-[500] text-gray-800 mt-4">{place.description}</span>
+            <button
+              onClick={() => setModalOpen(true)}
+              className="button-primary hover:bg-[#ff5f92] transition-all w-50 mt-4 cursor-pointer"
+              >Mostrar más</button>
           </div>
-          Check In: {place.checkIn} <br />
-          Check Out: {place.checkOut} <br />
-          Número máximo de huéspedes: {place.maxGuests}
         </div>
         <div>
           <BookingWidget place={place} />
         </div>
-      </div>
-      <div className="bg-white -mx-8 px-8 py-8 border-t border-gray-200">
-        <div>
-          <h2 className="font-semibold text-2xl">Información extra</h2>
-        </div>
-        <div className="mb-4 mt-2 text-sm text-gray-700 leading-5">
-          {place.extraInfo}
-        </div>
+        
+        {/* Modal */}
+        <InfoModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          place={place}
+        />
       </div>
     </div>
   );
