@@ -5,7 +5,7 @@ import { UserContext } from './UserContext';
 export default function Header() {
   const {user} = useContext(UserContext);
     return (
-        <header className="w-full flex flex-col justify-between items-center md:flex-row">
+        <header className="w-full flex justify-between items-center px-5">
         {/* Logo airbnb */}
         <Link to={'/'} className="flex items-center gap-1 transition hover:text-primary">
           <svg
@@ -25,7 +25,7 @@ export default function Header() {
           <span className="text-xl font-bold">Airbnb</span>
         </Link>
         {/* Medium component */}
-        <div className="flex items-center border border-gray-300 rounded-full py-1 px-4 shadow-md shadow-gray-300">
+        <div className="hidden lg:flex items-center border border-gray-300 rounded-full py-1 px-4 shadow-md shadow-gray-300">
           <div className="border-r border-gray-300 px-2 font-semibold truncate w-[90px] overflow-hidden md:w-[129px]">Cualquier lugar</div>
           <div className="px-2 border-r border-gray-300 font-semibold truncate w-[90px] overflow-hidden md:w-[130px]">Cualquier fecha</div>
           <div className="px-2 truncate w-[90px] overflow-hidden font-semibold md:w-[123px]">Añade viajeros</div>
@@ -79,7 +79,7 @@ export default function Header() {
             </svg>
           </div>
           {!!user && (
-            <div className="text-sm font-semibold">
+            <div className="hidden md:block text-sm font-semibold">
               {user.name}
             </div>
           )}

@@ -59,10 +59,10 @@ export default function BookingPage() {
             </div>
             
             
-            <div className="bg-gray-200 p-2 md:p-6 my-6 rounded-2xl flex items-center justify-between">
-                <div>
+            <div className="bg-gray-200 p-2 md:p-6 my-6 rounded-2xl flex flex-col gap-7 py-5 md:flex-row items-center md:justify-between">
+                <div className="flex flex-col items-center md:items-start">
                     <h2 className="text-xl md:text-2xl mb-4">Información sobre tu reserva</h2>
-                    <BookingDates booking={booking} className={"justify-start"} />
+                    <BookingDates booking={booking} className={"md:justify-start"} />
                 </div>
                 <div className="bg-primary p-6 text-white rounded-2xl">
                     <div>Precio total: </div>
