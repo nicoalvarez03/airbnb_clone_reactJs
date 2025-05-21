@@ -10,6 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Box from '@mui/material/Box';
+import toast from "react-hot-toast";
 
 
 export default function BookingWidget({ place }) {
@@ -49,17 +50,32 @@ export default function BookingWidget({ place }) {
   }
 
   async function bookThisPlace() {
-    const response = await axios.post('/bookings', {
-      checkIn: checkIn.toISOString(), 
-      checkOut: checkOut.toISOString(), 
-      numberOfGuests, 
-      name, 
-      phone, 
-      place:place._id,
-      price:numberOfNigths * place.price,
-    });
-    const bookingId = response.data._id;
-    setRedirect(`/account/bookings/${bookingId}`);
+    try{
+      if(!user){
+        toast.error("Por favor, inicia sesión para reservar");
+        setRedirect("/login");
+        return;
+      }else if(!name || !phone || !checkIn || !checkOut || !numberOfGuests){
+        toast.error("Por favor, completa todos los campos");
+        return;
+      }else{
+        const response = await axios.post('/bookings', {
+          checkIn: checkIn.toISOString(), 
+          checkOut: checkOut.toISOString(), 
+          numberOfGuests, 
+          name, 
+          phone, 
+          place:place._id,
+          price:numberOfNigths * place.price,
+        });
+        const bookingId = response.data._id;
+        toast.success("Reserva realizada con éxito");
+        setRedirect(`/account/bookings/${bookingId}`);
+      }
+    }catch(e){
+      toast.error(`Error inesperado ${e} al realizar la reserva. Por favor, inténtelo de nuevo`);
+      setCleared(true);
+    }
   }
 
   if (redirect) {
@@ -134,11 +150,16 @@ export default function BookingWidget({ place }) {
         )}
       </div>
 
-      <button className={`button-primary mt-4 transition ${
-          numberOfNigths === 0 && user ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-[#ff5f92]'
-        }`}
-        onClick={bookThisPlace}
+      <button className={`button-primary mt-4 transition 
+        ${numberOfNigths > 0 ? " hover:bg-[#ff5f92] cursor-pointer" : "bg-gray-300"}`}
         disabled={numberOfNigths === 0}
+        onClick={() => {
+          if (numberOfNigths > 0) {
+            bookThisPlace();
+          } else {
+            setCleared(true);
+          }
+        }}
         >
           
         Reserva este lugar por:
