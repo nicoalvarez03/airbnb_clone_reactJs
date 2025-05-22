@@ -69,7 +69,7 @@ export default function PlaceGallery({place}){
                 className="keen-slider__slide flex justify-center items-center md:h-[80vh]"
               >
                 <img
-                  src={`http://localhost:4000/uploads/${photo}`}
+                  src={photo}
                   alt=""
                   className="md:max-h-[80vh] md:rounded-xl"
                 />
@@ -115,7 +115,7 @@ export default function PlaceGallery({place}){
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="aspect-square object-cover cursor-pointer"
-                  src={"http://localhost:4000/uploads/" + place.photos?.[0]}
+                  src={place.photos?.[0]}
                   alt=""
                 />
               </div>
@@ -126,7 +126,7 @@ export default function PlaceGallery({place}){
               <img
                 onClick={() => setShowAllPhotos(true)}
                 className="aspect-square object-cover cursor-pointer"
-                src={"http://localhost:4000/uploads/" + place.photos?.[1]}
+                src={place.photos?.[1]}
                 alt=""
               />
             )}
@@ -135,7 +135,7 @@ export default function PlaceGallery({place}){
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="aspect-square object-cover relative top-2 cursor-pointer"
-                  src={"http://localhost:4000/uploads/" + place.photos?.[2]}
+                  src={place.photos?.[2]}
                   alt=""
                 />
               </div>
@@ -146,7 +146,7 @@ export default function PlaceGallery({place}){
               <img
                 onClick={() => setShowAllPhotos(true)}
                 className="aspect-square object-cover cursor-pointer"
-                src={"http://localhost:4000/uploads/" + place.photos?.[3]}
+                src={place.photos?.[3]}
                 alt=""
               />
             )}
@@ -155,7 +155,7 @@ export default function PlaceGallery({place}){
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="aspect-square object-cover relative top-2 cursor-pointer"
-                  src={"http://localhost:4000/uploads/" + place.photos?.[4]}
+                  src={place.photos?.[4]}
                   alt=""
                 />
               </div>

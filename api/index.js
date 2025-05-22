@@ -11,12 +11,23 @@ const jwt = require('jsonwebtoken'); // Importamos jwt para crear tokens de aute
 const imageDownloader = require('image-downloader'); // Importamos image-downloader para descargar imágenes
 const multer = require('multer'); // Importamos multer para subir archivos
 const fs = require('fs'); // Importamos fs para manejar archivos
+const fsExtra = require('fs-extra'); // Importamos fs-extra para manejar archivos de manera más sencilla
+
 
 require('dotenv').config() // Importamos dotenv para cargar variables de entorno
 const app = express(); // Creamos el servidor
 
 const bcryptSalt = bcrypt.genSaltSync(10); // Creamos una sal para encriptar contraseñas
 const jwtSecret = 'jkashdjkadkjad'; // Creamos una clave secreta para firmar los tokens
+
+const cloudinary = require('cloudinary').v2; // Importamos cloudinary para subir imágenes a la nube
+
+// Configuramos cloudinary con las variables de entorno
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 app.use(express.json()); // Le decimos a express que vamos a usar JSON
 app.use(cookieParser()); // Le decimos a express que vamos a usar cookies
@@ -102,36 +113,58 @@ app.post('/logout', (req, res) => {
     res.clearCookie('token').json(true);
 });
 
-// Creamos una ruta para subir una imagen desde el formulario de alojamientos
+// Creamos una ruta para subir una imagen desde el formulario de alojamientos y guardarla en la nube
+const axios = require('axios'); // Importamos axios para hacer peticiones HTTP
 app.post('/upload-by-link', async (req, res) => {
-    const {link} = req.body;
-    try{
-        const newName = 'photo' + Date.now() + '.jpg';
-        await imageDownloader.image({
-            url: link,
-            dest: __dirname+'/uploads/' + newName,
-        });
-        res.json(newName);
-    }catch(err){
-        res.status(422).json(err);
+    const { link } = req.body;
+  
+    try {
+      const response = await axios({
+        url: link,
+        responseType: 'arraybuffer',
+      });
+  
+      const tempFilePath = `uploads/photo${Date.now()}.jpg`;
+      await fsExtra.outputFile(tempFilePath, response.data);
+  
+      const result = await cloudinary.uploader.upload(tempFilePath, {
+        folder: 'airbnb-clone',
+      });
+  
+      await fsExtra.unlink(tempFilePath);
+      res.json(result.secure_url);
+    } catch (err) {
+      console.error('❌ Error al subir imagen desde link:', err.message);
+      res.status(422).json({ error: err.message });
     }
-});
+  });
 
-// Creamos una ruta para subir varias imágenes
+// Creamos una ruta para subir varias imágenes desde local y guardarlas en la nube
 const photosMiddleware = multer({dest: 'uploads/'});
-app.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
+app.post('/upload', photosMiddleware.array('photos', 100), async (req, res) => {
     const uploadedFiles = [];
-    for(let i = 0; i < req.files.length; i++) {
-        const {path, originalname} = req.files[i];
-        const parts = originalname.split('.');
-        const ext = parts[parts.length - 1];
-        const newPath = path + '.' + ext;
-        fs.renameSync(path, newPath);
-        uploadedFiles.push(newPath.replace('uploads\\', ''));
-        console.log(newPath)
+  
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'No se recibieron archivos.' });
     }
-    res.json(uploadedFiles)
-});
+  
+    try {
+      for (const file of req.files) {
+        const { path } = file;
+        const result = await cloudinary.uploader.upload(path, {
+          folder: 'airbnb-clone',
+        });
+  
+        uploadedFiles.push(result.secure_url);
+        await fsExtra.unlink(path);
+      }
+  
+      res.json(uploadedFiles);
+    } catch (error) {
+      console.error('❌ Error al subir a Cloudinary:', error.message);
+      res.status(500).json({ error: error.message });
+    }
+  });
 
 // Creamos una ruta para crear un alojamiento nuevo
 app.post('/places', (req, res) => {
