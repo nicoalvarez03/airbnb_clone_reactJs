@@ -280,6 +280,28 @@ app.get('/bookings', async (req, res) => {
     res.json(await Booking.find({user: userData.id}).populate('place'));
 });
 
+// Creamos una ruta para obtener una reserva por su id
+app.get('/bookings/:id', async (req, res) => {
+    const { token } = req.cookies;
+    if (!token) return res.status(401).json('Unauthorized');
+  
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.status(403).json('Token inválido');
+  
+      const booking = await Booking.findById(req.params.id).populate('place');
+  
+      if (!booking) {
+        return res.status(404).json('Reserva no encontrada');
+      }
+  
+      if (booking.user.toString() !== userData.id) {
+        return res.status(403).json('No autorizado');
+      }
+  
+      res.json(booking);
+    });
+  });
+
 // Creamos una ruta para eliminar una reserva
 app.delete('/bookings/:id', async (req, res) => {
     const userData = await getUserDataFromReq(req);

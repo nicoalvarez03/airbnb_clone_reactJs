@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
