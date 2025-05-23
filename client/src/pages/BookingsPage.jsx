@@ -17,7 +17,7 @@ export default function BookingsPage() {
   return (
     <div>
       <AccountNav />
-      <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
         {bookings?.length > 0 &&
           bookings.map((booking) => (
             <Link
@@ -25,17 +25,17 @@ export default function BookingsPage() {
               key={booking._id}
               className="flex justify-center px-5"
             >
-              <div className="bg-gray-200 rounded-2xl overflow-hidden mt-4 flex flex-col md:flex-row w-300 gap-4">              
-                <div className="w-full object-cover md:w-48">
+              <div className="bg-gray-200 lg:max-h-[180px] rounded-2xl overflow-hidden mt-4 flex flex-col items-center lg:flex-row w-300 gap-4">              
+                <div className="w-full object-cover lg:w-48">
                   <PlaceImg place={booking.place} />
                 </div>
                 <div className="flex flex-col items-center md:block py-3 pr-3 grow">
-                  <h2 className="text-xl font-bold text-center md:text-start">{booking.place.title}</h2>
+                  <h2 className="text-xl font-bold text-center lg:text-start">{booking.place.title}</h2>
                   <div className="items-center">
 
                     <BookingDates booking={booking} className="mb-2 mt-4 text-gray-500" />
 
-                    <div className="flex gap-1 items-center justify-center md:justify-start">
+                    <div className="flex gap-1 items-center justify-center lg:justify-start">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
