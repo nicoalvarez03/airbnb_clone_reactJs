@@ -13,7 +13,7 @@ export default function LoginPage() {
   async function handleLoginSubmit(ev) {
     ev.preventDefault();
     try{
-        const {data} = await axios.post("/login", {
+        const {data} = await axios.post(`${import.meta.env.BACKEND_URL}/login`, {
             email,
             password,
         });

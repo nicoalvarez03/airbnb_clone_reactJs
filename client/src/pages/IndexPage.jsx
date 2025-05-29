@@ -8,7 +8,7 @@ export default function IndexPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("/places").then((response) => {
+    axios.get(`${import.meta.env.BACKEND_URL}/places`).then((response) => {
       setPlaces(response.data);
     });
   }, []);
@@ -16,7 +16,7 @@ export default function IndexPage() {
   useEffect(() => {
     const startTime = Date.now(); // ⏱️ Tiempo al comenzar
   
-    axios.get("/places")
+    axios.get(`${import.meta.env.BACKEND_URL}/places`)
       .then((response) => {
         setPlaces(response.data);
       })

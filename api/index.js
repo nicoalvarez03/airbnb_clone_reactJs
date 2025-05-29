@@ -32,9 +32,21 @@ cloudinary.config({
 app.use(express.json()); // Le decimos a express que vamos a usar JSON
 app.use(cookieParser()); // Le decimos a express que vamos a usar cookies
 app.use('/uploads', express.static(__dirname + '/uploads')); // Le decimos a express que vamos a servir archivos estáticos
+
+const allowedOrigins = [
+  'http://localhost:5173',            // frontend dev local
+  'https://tu-frontend.vercel.app'   // frontend en producción (Vercel)
+];
+
 app.use(cors({
-    credentials: true,
-    origin: 'http://localhost:5173'
+  credentials: true,
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  }
 })); // Le decimos a cors que permita peticiones desde el front-end
 
 mongoose.connect(process.env.MONGO_URL); // Nos conectamos a la base de datos

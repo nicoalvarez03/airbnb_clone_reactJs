@@ -28,7 +28,7 @@ export default function PlacesFormPage() {
     if(!id){
       return
     }
-    axios.get(`/places/${id}`).then(response => {
+    axios.get(`${import.meta.env.BACKEND_URL}/places/${id}`).then(response => {
       const {data} = response;
       setTitle(data.title || "");
       setAddress(data.address || "");
@@ -89,13 +89,13 @@ export default function PlacesFormPage() {
         }
         if (id) {
           // Actualizar un lugar existente
-          await axios.put("/places", {
+          await axios.put(`${import.meta.env.BACKEND_URL}/places`, {
             id, ...placeData
           });
           setRedirect(true);
         }else{
           // Crear un nuevo lugar
-          await axios.post("/places", placeData);
+          await axios.post(`${import.meta.env.BACKEND_URL}/places`, placeData);
           setRedirect(true);
         }
         toast.success("Lugar guardado con éxito");
@@ -108,7 +108,7 @@ export default function PlacesFormPage() {
 
   // Se crea una funcion para eliminar un alojamiento
   async function deletePlace() {
-        await axios.delete(`/places/${id}`);
+        await axios.delete(`${import.meta.env.BACKEND_URL}/places/${id}`);
         toast.success("Alojamiento eliminado con éxito");
         setRedirect(true);
   }
