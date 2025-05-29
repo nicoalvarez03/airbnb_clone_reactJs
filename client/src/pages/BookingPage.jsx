@@ -15,14 +15,14 @@ export default function BookingPage() {
 
     useEffect(() => {
         if(id){
-            axios.get(`${import.meta.env.BACKEND_URL}/bookings/${id}`).then((response) => {
+            axios.get(`${import.meta.env.VITE_BACKEND_URL}/bookings/${id}`).then((response) => {
                 setBooking(response.data);
               });
         }
     }, [id]);
 
     async function deleteBooking() {
-        await axios.delete(`${import.meta.env.BACKEND_URL}/bookings/`+id);
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/bookings/`+id);
         toast.success('Reserva eliminada con éxito');
         setModalOpen(false);
         setRedirect('/account/bookings');

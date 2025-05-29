@@ -7,7 +7,7 @@ import PlaceImg from "../PlaceImg";
 export default function PlacesPage() {
   const [places, setPlaces] = useState([]);
   useEffect(() => {
-    axios.get(`${import.meta.env.BACKEND_URL}/user-places`).then(({ data }) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/user-places`).then(({ data }) => {
       setPlaces(data);
     });
   }, []);
