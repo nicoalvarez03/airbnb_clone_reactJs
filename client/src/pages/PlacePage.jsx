@@ -13,7 +13,7 @@ export default function PlacePage() {
 
   useEffect(() => {
     if (!id) return;
-    axios.get(`${import.meta.env.BACKEND_URL}/places/${id}`).then((response) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/places/${id}`).then((response) => {
       setPlace(response.data);
     });
   }, [id]);

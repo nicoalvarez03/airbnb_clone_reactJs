@@ -19,7 +19,7 @@ export default function RegisterPage() {
         return;
 
       }else{
-        await axios.post(`${import.meta.env.BACKEND_URL}/register`, {
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/register`, {
           name, 
           email, 
           password

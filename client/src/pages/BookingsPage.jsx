@@ -9,7 +9,7 @@ export default function BookingsPage() {
   const [bookings, setBookings] = useState([]);
   
   useEffect(() => {
-    axios.get(`${import.meta.env.BACKEND_URL}/bookings`).then((response) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/bookings`).then((response) => {
       setBookings(response.data);
     });
   }, []);
