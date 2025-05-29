@@ -35,7 +35,7 @@ app.use('/uploads', express.static(__dirname + '/uploads')); // Le decimos a exp
 
 const allowedOrigins = [
   'http://localhost:5173',            // frontend dev local
-  'https://tu-frontend.vercel.app'   // frontend en producción (Vercel)
+  'https://airnobnb.vercel.app'   // frontend en producción (Vercel)
 ];
 
 app.use(cors({
