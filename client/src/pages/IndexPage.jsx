@@ -38,7 +38,7 @@ export default function IndexPage() {
       {loading
         ? Array.from({ length: places.length }).map((_, index) => <SkeletonCard key={index} />)
         : places.map((place) => (
-            <Link target="_blank" to={'/place/' + place._id} key={place._id}>
+            <Link target="_blank" to={`/place/` + place._id} key={place._id}>
               <div className="bg-gray-500 mb-2 rounded-2xl flex">
                 {place.photos?.[0] && (
                   <img
