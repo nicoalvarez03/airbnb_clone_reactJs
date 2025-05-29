@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../UserContext";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import PlacesPage from "./PlacesPage";
 import AccountNav from "../AccountNav";
@@ -41,7 +41,7 @@ export default function ProfilePage() {
           Usuario logeado: {user.name} ({user.email})
           <button
             onClick={logout}
-            className="bg-primary text-white py-1 rounded-full w-100 max-w-sm mt-2 cursor-pointer"
+            className="bg-primary text-white py-1 rounded-full w-50 md:w-100 max-w-sm mt-2 cursor-pointer"
           >
             Cerrar sesión
           </button>

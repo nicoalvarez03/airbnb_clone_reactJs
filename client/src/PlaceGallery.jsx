@@ -1,16 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
 
 export default function PlaceGallery({place}){
     const [showAllPhotos, setShowAllPhotos] = useState(false);
+    const [sliderRef, instanceRef] = useKeenSlider({loop: true});
+
+
+    const nextSlide = () => {
+      instanceRef.current?.next();
+    };
+  
+    const prevSlide = () => {
+      instanceRef.current?.prev();
+    };
+
+    useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          setShowAllPhotos(false);
+          document.body.style.overflow = '';
+        }
+      };
+    
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     if (showAllPhotos)
+    {
+      document.body.style.overflow = 'hidden';
+    
         return (
-          <div className="absolute inset-0 text-white min-h-screen">
-            <div className="bg-black p-8 grid gap-4">
+          <div className="fixed inset-0 text-white bg-black md:h-screen w-full z-[9999]">
+            <div className="bg-black md:p-8 grid md:gap-4">
               <div>
-                <h2 className="text-3xl mr-48">Photos of {place.title}</h2>
+                <h2 className="hidden md:block text-3xl mr-48">Photos of {place.title}</h2>
                 <button
-                  onClick={() => setShowAllPhotos(false)}
+                  onClick={() => {
+                    setShowAllPhotos(false);
+                    document.body.style.overflow = '';
+                  }}
                   className="fixed right-12 top-8 flex gap-1 items-center py-2 px-4 rounded-2xl shadow shadow-black bg-white text-black cursor-pointer"
                 >
                   <svg
@@ -30,15 +60,50 @@ export default function PlaceGallery({place}){
                   Cerrar fotos
                 </button>
               </div>
-              {place?.photos?.length > 0 &&
-                place.photos.map((photo) => (
-                  <div key={photo} className="flex justify-center">
-                    <img src={"http://localhost:4000/uploads/" + photo} alt="" width={1000}/>
-                  </div>
-                ))}
+
+          
+          <div ref={sliderRef} className="keen-slider flex mt-20 md:mt-8 h-[80vh]">
+            {place?.photos?.map((photo) => (
+              <div
+                key={photo}
+                className="keen-slider__slide flex justify-center items-center md:h-[80vh]"
+              >
+                <img
+                  src={photo}
+                  alt=""
+                  className="md:max-h-[80vh] md:rounded-xl"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden absolute left-50 top-1/2 transform -translate-y-1/2 border-1 md:flex items-center justify-center text-white rounded-full shadow-lg hover:bg-white/40 transition z-50">
+            <button
+                onClick={prevSlide}
+                className="p-4 cursor-pointer"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
+                  <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
+                </svg>
+            </button>
+          </div>
+
+
+            <div className="hidden absolute right-50 top-1/2 transform -translate-y-1/2 border-1 md:flex items-center justify-center text-white rounded-full shadow-lg hover:bg-white/40 transition z-50">
+              <button
+                onClick={nextSlide}
+                className="p-4 cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
+                  <path fillRule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clipRule="evenodd" />
+                </svg>
+
+              </button>
+            </div>
             </div>
           </div>
         );
+      }
 
         
     return(
@@ -50,7 +115,7 @@ export default function PlaceGallery({place}){
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="aspect-square object-cover cursor-pointer"
-                  src={"http://localhost:4000/uploads/" + place.photos?.[0]}
+                  src={place.photos?.[0]}
                   alt=""
                 />
               </div>
@@ -61,7 +126,7 @@ export default function PlaceGallery({place}){
               <img
                 onClick={() => setShowAllPhotos(true)}
                 className="aspect-square object-cover cursor-pointer"
-                src={"http://localhost:4000/uploads/" + place.photos?.[1]}
+                src={place.photos?.[1]}
                 alt=""
               />
             )}
@@ -70,7 +135,7 @@ export default function PlaceGallery({place}){
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="aspect-square object-cover relative top-2 cursor-pointer"
-                  src={"http://localhost:4000/uploads/" + place.photos?.[2]}
+                  src={place.photos?.[2]}
                   alt=""
                 />
               </div>
@@ -81,7 +146,7 @@ export default function PlaceGallery({place}){
               <img
                 onClick={() => setShowAllPhotos(true)}
                 className="aspect-square object-cover cursor-pointer"
-                src={"http://localhost:4000/uploads/" + place.photos?.[3]}
+                src={place.photos?.[3]}
                 alt=""
               />
             )}
@@ -90,7 +155,7 @@ export default function PlaceGallery({place}){
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="aspect-square object-cover relative top-2 cursor-pointer"
-                  src={"http://localhost:4000/uploads/" + place.photos?.[4]}
+                  src={place.photos?.[4]}
                   alt=""
                 />
               </div>

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,11 +19,11 @@ export default function LoginPage() {
         });
         setUser(data);
 
-        alert('Login successful');
+        toast.success(`Bienvenido de nuevo '${data.name}'`);
 
         setRedirect(true);
     }catch(e){
-        alert('Login failed. Please try again later');
+        toast.error("Email o contraseña incorrectas. Por favor, inténtelo de nuevo");
         console.error(e);
     }
   }
