@@ -65,7 +65,7 @@ export default function BookingWidget({ place }) {
         toast.error(`El número de huéspedes tiene que ser mínimo 1 y máximo ${place.maxGuests}`);
         return;
       }else{
-        const response = await axios.post('/bookings', {
+        const response = await axios.post(`${import.meta.env.BACKEND_URL}/bookings`, {
           checkIn: checkIn.toISOString(), 
           checkOut: checkOut.toISOString(), 
           numberOfGuests, 
