@@ -40,13 +40,7 @@ const allowedOrigins = [
 
 app.use(cors({
   credentials: true,
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('No permitido por CORS'));
-    }
-  }
+  origin: allowedOrigins
 })); // Le decimos a cors que permita peticiones desde el front-end
 
 mongoose.connect(process.env.MONGO_URL); // Nos conectamos a la base de datos
@@ -95,7 +89,12 @@ app.post('/login', async (req, res) => {
                 if(err){
                     res.status(422).json('error signing token');
                 }else{
-                    res.cookie('token', token).json(userDoc);
+                    res.cookie('token', token, {
+                      httpOnly: true, // La cookie solo se enviará a través de HTTP, no accesible desde JavaScript
+                      secure: process.env.NODE_ENV === 'production', // La cookie será segura en producción (HTTPS)
+                      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // Configuración de SameSite para mayor seguridad
+                      path: '/', // La cookie estará disponible en todo el sitio
+                    }).json(userDoc);
                 }
             });
         }else{
